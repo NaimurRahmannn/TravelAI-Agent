@@ -1,15 +1,13 @@
 from fastapi import APIRouter
 
-from app.schemas.chat import ChatRequest, ChatResponse
-from app.services.chat_service import ChatService
+
+from app.api.chat import router as chat_router
+from app.api.health import router as health
 
 router = APIRouter()
+router.include_router(chat_router)
+router.include_router(health)
 
-travel_chat_service = ChatService()
 
 
-@router.post("/chat", response_model=ChatResponse)
-def chat(request: ChatRequest):
-    response = travel_chat_service.generate_response(request.message)
 
-    return ChatResponse(response=response)
