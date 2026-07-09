@@ -1,16 +1,15 @@
 from fastapi import APIRouter
-from app.chains.travel_chain import travel_chain
-from app.schemas.chat import ChatRequest,ChatResponse
 
-router=APIRouter()
+from app.schemas.chat import ChatRequest, ChatResponse
+from app.services.chat_service import ChatService
 
-@router.post("/chat",response_model=ChatResponse)
-def chat(request:ChatRequest):
-    response=travel_chain.invoke(
-        {
-            "user_input":request.message
-        }
-    )
-    return ChatResponse(
-        response=response
-    )
+router = APIRouter()
+
+service = ChatService()
+
+
+@router.post("/chat", response_model=ChatResponse)
+def chat(request: ChatRequest):
+    response = service.generate_response(request.message)
+
+    return ChatResponse(response=response)
