@@ -1,4 +1,4 @@
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
 
 travel_prompt = ChatPromptTemplate.from_messages(
     [
@@ -16,11 +16,13 @@ Your responsibilities are:
 - Be concise and helpful.
             """,
         ),
+        MessagesPlaceholder(
+            variable_name="history",
+            optional=True,
+        ),
         (
             "human",
-            """
-           {user_input}
-"""
+            "{user_input}",
         ),
     ]
 )
