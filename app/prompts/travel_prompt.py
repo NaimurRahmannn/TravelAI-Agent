@@ -19,8 +19,7 @@ Your responsibilities are:
         (
             "human",
             """
-            Destination: {destination},
-            Budget: {budget}
+           {user_input}
 """
         ),
     ]

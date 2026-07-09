@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 from app.core.config import settings
-from app.llm import get_llm
-from app.prompts.travel_prompt import travel_prompt
-from app.chains.travel_chain import travel_chain
+from app.api.routes import router
 app = FastAPI(
     title=settings.app_name,
     description="AI-powered travel planning assistant",
@@ -10,22 +8,7 @@ app = FastAPI(
 )
 
 
-
-@app.get("/")
-def root():
-    try:
-        response =travel_chain.invoke({
-            "destination":"Japan",
-            "budget":"$2000",
-            })
-        return {
-        "message": "Travel AI API is running",
-        "model": settings.gemini_model,
-        "response": response,
-    }
-    except Exception as e:
-        return {"error": str(e)} 
-    
+app.include_router(router)
 
 
 @app.get("/health")
