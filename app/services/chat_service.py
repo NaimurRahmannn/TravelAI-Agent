@@ -39,13 +39,9 @@ class ChatService:
 
         conversation_id = conversation_id or str(uuid4())
 
-        history = self.conversation_store.get_history(
-            conversation_id
-        )
+        history = self.conversation_store.get_history(conversation_id)
 
-        current_trip = self.trip_store.get_trip(
-            conversation_id
-        )
+        current_trip = self.trip_store.get_trip(conversation_id)
 
         extracted_updates = self.trip_extraction_chain.invoke(
             {
@@ -58,15 +54,12 @@ class ChatService:
             conversation_id,
             extracted_updates,
         )
-
-        itinerary = self.itinerary_store.get_itinerary(
-            conversation_id
-        )
-
-        clarification_question = (
-            self.clarification_service.get_next_question(
-                trip_preferences
-            )
+        trip_changed = current_trip.model_dump() != trip_preferences.model_dump()
+        if trip_changed:
+            self.itinerary_store.delete_itinerary(conversation_id)
+        itinerary = self.itinerary_store.get_itinerary(conversation_id)
+        clarification_question = self.clarification_service.get_next_question(
+            trip_preferences
         )
 
         if clarification_question:
@@ -75,9 +68,7 @@ class ChatService:
         elif itinerary is None:
             itinerary = self.itinerary_chain.invoke(
                 {
-                    "trip_context": (
-                        trip_preferences.model_dump_json()
-                    ),
+                    "trip_context": (trip_preferences.model_dump_json()),
                 }
             )
 
@@ -97,9 +88,7 @@ class ChatService:
                 {
                     "history": history.messages,
                     "user_input": message,
-                    "trip_context": (
-                        trip_preferences.model_dump_json()
-                    ),
+                    "trip_context": (trip_preferences.model_dump_json()),
                 }
             )
 

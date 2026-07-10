@@ -17,3 +17,11 @@ class ItineraryStore:
         itinerary: Itinerary,
     ) -> None:
         self._itineraries[conversation_id] = itinerary
+    def delete_itinerary(
+        self,
+        conversation_id: str,
+    ) -> None:
+        self._itineraries.pop(
+            conversation_id,
+            None,
+        )
