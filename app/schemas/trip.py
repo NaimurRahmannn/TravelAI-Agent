@@ -17,9 +17,13 @@ class TripPreferences(BaseModel):
         description="Traveler budget",
     )
 
-    travellers: int | None = Field(
+    travelers: int | None = Field(
         default=None,
         description="Number of travelers",
+    )
+    duration_days:int|None=Field(
+        default=None,
+        description="Number of days"
     )
     def get_missing_fields(self)->list[str]:
         required_fields=[
@@ -27,6 +31,7 @@ class TripPreferences(BaseModel):
             "travel_date",
             "budget",
             "travelers",
+            "duration_days"
         ]
         return[
             field 
@@ -38,3 +43,4 @@ class TripPreferenceUpdate(BaseModel):
     travel_date: str | None = None
     budget: float | None = None
     travelers: int | None = None
+    duration_days: int | None=None
