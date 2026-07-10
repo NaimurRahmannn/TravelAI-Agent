@@ -9,6 +9,6 @@ structured_llm=llm.with_structured_output(
     Itinerary
 )
 
-iternerary_chain=(
+itinerary_chain=(
     itinerary_prompt|structured_llm
 )
