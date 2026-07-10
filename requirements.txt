@@ -4,3 +4,4 @@ langchain
 langchain-google-genai 
 python-dotenv 
 pydantic-settings
+langchain-groq
