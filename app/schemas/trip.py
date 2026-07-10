@@ -33,3 +33,8 @@ class TripPreferences(BaseModel):
             for field in required_fields
             if getattr(self,field)is None
         ]
+class TripPreferenceUpdate(BaseModel):
+    destination: str | None = None
+    travel_date: str | None = None
+    budget: float | None = None
+    travelers: int | None = None

@@ -35,17 +35,18 @@ class ChatService:
         conversation_id = conversation_id or str(uuid4())
 
         history = self.conversation_store.get_history(conversation_id)
-
-        extracted_preferences = self.trip_extraction_chain.invoke(
+        current_trip = self.trip_store.get_trip(
+            conversation_id
+        )
+        extracted_updates = self.trip_extraction_chain.invoke(
             {
-                "history": history.messages,
+                "trip_context": current_trip.model_dump_json(),
                 "user_input": message,
             }
         )
-
         trip_preferences = self.trip_store.update_trip(
             conversation_id,
-            extracted_preferences,
+            extracted_updates,
         )
         clarification_question = self.clarification_service.get_next_question(
             trip_preferences

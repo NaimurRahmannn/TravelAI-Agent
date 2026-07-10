@@ -1,4 +1,4 @@
-from app.schemas.trip import TripPreferences
+from app.schemas.trip import TripPreferences,TripPreferenceUpdate
 
 
 class TripStore:
@@ -17,7 +17,7 @@ class TripStore:
     def update_trip(
         self,
         conversation_id: str,
-        updates: TripPreferences,
+        updates: TripPreferenceUpdate,
     ) -> TripPreferences:
         current_trip = self.get_trip(conversation_id)
 
