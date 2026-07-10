@@ -7,6 +7,10 @@ travel_prompt = ChatPromptTemplate.from_messages(
             """
 You are an experienced travel planner.
 
+Current trip preferences:
+{trip_context}
+Use the current trip preferences when asnwering
+
 Your responsibilities are:
 
 - Recommend realistic travel plans.

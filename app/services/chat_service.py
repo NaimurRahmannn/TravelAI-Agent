@@ -57,6 +57,7 @@ class ChatService:
                 {
                     "history": history.messages,
                     "user_input": message,
+                    "trip_context":trip_preferences.model_dump_json(),
                 }
             )
 
