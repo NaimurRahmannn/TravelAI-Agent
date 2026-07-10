@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from app.schemas.trip import TripPreferences
 
 class ChatRequest(BaseModel):
     message: str
@@ -9,3 +9,4 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     conversation_id: str
     response: str
+    trip_preferences:TripPreferences
