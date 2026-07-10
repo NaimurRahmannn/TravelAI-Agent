@@ -6,7 +6,7 @@ class ClarificationService:
         "destination": "Where would you like to travel?",
         "travel_date": "When are you planning to travel?",
         "budget": "What is your approximate travel budget?",
-        "travellers": "How many people are traveling?",
+        "travelers": "How many people are traveling?",
     }
 
     def get_next_question(

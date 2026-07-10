@@ -26,7 +26,7 @@ class TripPreferences(BaseModel):
             "destination",
             "travel_date",
             "budget",
-            "travellers",
+            "travelers",
         ]
         return[
             field 
