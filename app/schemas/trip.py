@@ -17,7 +17,19 @@ class TripPreferences(BaseModel):
         description="Traveler budget",
     )
 
-    travelers: int | None = Field(
+    travellers: int | None = Field(
         default=None,
         description="Number of travelers",
     )
+    def get_missing_fields(self)->list[str]:
+        required_fields=[
+            "destination",
+            "travel_date",
+            "budget",
+            "travellers",
+        ]
+        return[
+            field 
+            for field in required_fields
+            if getattr(self,field)is None
+        ]
