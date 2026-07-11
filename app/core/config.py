@@ -2,11 +2,11 @@ from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    app_name: str
-    app_version: str
-    debug: bool
-    groq_api_key: str
-    groq_model: str
+    app_name: str = "TravelAI Agent"
+    app_version: str = "1.0.0"
+    debug: bool = True
+    groq_api_key: str = ""
+    groq_model: str = "llama-3.3-70b-versatile"
     amadeus_api_key: str | None = None
     amadeus_api_secret: str | None = None
     amadeus_base_url: str = "https://test.api.amadeus.com"

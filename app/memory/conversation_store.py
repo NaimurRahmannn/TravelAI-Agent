@@ -14,4 +14,4 @@ class ConversationStore:
                 InMemoryChatMessageHistory()
             )
 
-        return self._histories[conversation_id]
+        return self._histories[conversation_id]
