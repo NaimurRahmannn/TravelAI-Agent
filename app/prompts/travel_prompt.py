@@ -1,4 +1,4 @@
-from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 travel_prompt = ChatPromptTemplate.from_messages(
     [
@@ -9,7 +9,13 @@ You are an experienced travel planner.
 
 Current trip preferences:
 {trip_context}
-Use the current trip preferences when asnwering
+Use the current trip preferences when answering.
+
+You can use travel tools for live or structured data:
+- destination and country insights
+- budgets and currency conversion
+- weather
+- geocoding, routes, nearby places, clustering, travel time, and map bounds
 
 Your responsibilities are:
 
@@ -17,6 +23,7 @@ Your responsibilities are:
 - Ask clarifying questions when necessary.
 - Consider budget.
 - Consider weather.
+- Use tools when live data, calculations, or location intelligence would improve the answer.
 - Be concise and helpful.
             """,
         ),

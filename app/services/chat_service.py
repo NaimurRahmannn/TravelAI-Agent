@@ -9,6 +9,8 @@ from app.memory.conversation_store import ConversationStore
 from app.memory.itinerary_store import ItineraryStore
 from app.memory.trip_store import TripStore
 from app.services.clarification_service import ClarificationService
+from app.tools import TRAVEL_TOOLS
+from app.tools.tool_executor import ToolExecutor
 
 
 class ChatService:
@@ -21,6 +23,7 @@ class ChatService:
         trip_store: TripStore,
         itinerary_store: ItineraryStore,
         clarification_service: ClarificationService,
+        tool_executor: ToolExecutor | None = None,
     ):
         self.chain = chain
         self.trip_extraction_chain = trip_extraction_chain
@@ -29,6 +32,7 @@ class ChatService:
         self.trip_store = trip_store
         self.itinerary_store = itinerary_store
         self.clarification_service = clarification_service
+        self.tool_executor = tool_executor or ToolExecutor(TRAVEL_TOOLS)
 
     def generate_response(
         self,
@@ -84,12 +88,10 @@ class ChatService:
             )
 
         else:
-            response = self.chain.invoke(
-                {
-                    "history": history.messages,
-                    "user_input": message,
-                    "trip_context": (trip_preferences.model_dump_json()),
-                }
+            response = self._generate_tool_augmented_response(
+                history=history.messages,
+                message=message,
+                trip_context=trip_preferences.model_dump_json(),
             )
 
         history.add_messages(
@@ -105,3 +107,46 @@ class ChatService:
             trip_preferences,
             itinerary,
         )
+
+    def _generate_tool_augmented_response(
+        self,
+        history: list,
+        message: str,
+        trip_context: str,
+    ) -> str:
+        tool_history = list(history)
+        response_message = self.chain.invoke(
+            {
+                "history": tool_history,
+                "user_input": message,
+                "trip_context": trip_context,
+            }
+        )
+
+        for _ in range(3):
+            tool_calls = getattr(response_message, "tool_calls", None) or []
+            if not tool_calls:
+                return str(response_message.content)
+
+            tool_messages = [
+                self.tool_executor.execute(tool_call)
+                for tool_call in tool_calls
+            ]
+            tool_history = [
+                *tool_history,
+                HumanMessage(content=message),
+                response_message,
+                *tool_messages,
+            ]
+            response_message = self.chain.invoke(
+                {
+                    "history": tool_history,
+                    "user_input": (
+                        "Use the tool results above to answer the user's "
+                        "travel question."
+                    ),
+                    "trip_context": trip_context,
+                }
+            )
+
+        return str(response_message.content)
