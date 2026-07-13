@@ -10,6 +10,7 @@ from app.tools.maps import (
     reverse_geocode,
     travel_time_matrix,
 )
+from app.tools.rag import search_travel_knowledge
 from app.tools.weather import get_current_weather
 
 
@@ -25,6 +26,7 @@ TRAVEL_TOOLS = [
     cluster_places,
     travel_time_matrix,
     map_bounds,
+    search_travel_knowledge,
 ]
 
 TRAVEL_TOOL_NAMES = tuple(tool.name for tool in TRAVEL_TOOLS)
